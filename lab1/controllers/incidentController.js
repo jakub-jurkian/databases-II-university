@@ -1,6 +1,5 @@
 const incidentService = require("../services/incidentService");
 
-// GET /api/v1/incidents/level=? status=?
 const getAll = async (req, res) => {
   try {
     const filters = {
@@ -14,7 +13,6 @@ const getAll = async (req, res) => {
   }
 };
 
-// POST /api/v1/incidents/newIncident.id
 const create = async (req, res, next) => {
   try {
     const data = {
