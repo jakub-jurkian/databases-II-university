@@ -14,7 +14,7 @@ const getStats = async () => {
     heroesByPower,
     incidentsByStatus,
     incidentsByLevel,
-    resolvedRows,
+    resolvedIncidents,
   ] = await Promise.all([
     db("heroes").count("* as total").first(),
     db("incidents").count("* as total").first(),
@@ -23,25 +23,21 @@ const getStats = async () => {
     db("incidents").select("status").count("* as count").groupBy("status"),
     db("incidents").select("level").count("* as count").groupBy("level"),
     db("incidents")
+      .select("assigned_at", "resolved_at")
       .where("status", "resolved")
       .whereNotNull("assigned_at")
-      .whereNotNull("resolved_at")
-      .avg(
-        db.raw(
-          "EXTRACT(EPOCH FROM (resolved_at - assigned_at)) / 60 as avg_minutes",
-        ),
-      )
-      .first(),
+      .whereNotNull("resolved_at"),
   ]);
 
   const avgResolutionMinutes =
-    resolvedRows.length === 0
+    resolvedIncidents.length === 0
       ? 0
-      : resolvedRows.reduce((sum, row) => {
-          const assignedAt = new Date(row.assigned_at);
-          const resolvedAt = new Date(row.resolved_at);
+      : resolvedIncidents.reduce((sum, incident) => {
+          const assignedAt = new Date(incident.assigned_at);
+          const resolvedAt = new Date(incident.resolved_at);
+
           return sum + (resolvedAt - assignedAt) / 60000;
-        }, 0) / resolvedRows.length;
+        }, 0) / resolvedIncidents.length;
 
   return {
     totals: {

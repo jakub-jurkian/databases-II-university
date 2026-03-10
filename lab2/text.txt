@@ -1,0 +1,30 @@
+# Wyczyszczenie bazy do zera (sprawdzenie funkcji down)
+npx knex migrate:rollback --all
+
+# Uruchomienie migracji (sprawdzenie funkcji up i migracji addytywnej)
+npx knex migrate:latest
+
+# Sprawdzenie statusu - lista plików jako "up"
+npx knex migrate:status
+
+# Uruchomienie seedów na środowisku deweloperskim
+npx knex seed:run
+
+# Uruchomienie migracji na bazie testowej
+npx knex migrate:latest --env test
+
+# Wstawienie 5 bohaterów i 8 incydentów z jawnie zdefiniowanymi ID
+npx knex seed:run --env test
+
+Paginacja i Filtry: GET /api/v1/heroes?status=available&power=flight&page=1&pageSize=5
+
+/api/v1/stats
+
+
+avg - W getStats() zachowałem pełne użycie Query Buildera Knexa dla pobrania danych
+i agregacji możliwych do wyrażenia bezpiecznie przez API, czyli count() i groupBy().
+Średni czas rozwiązania incydentu wymaga agregacji po wyrażeniu resolved_at - assigned_at,
+a Knex bez raw() traktuje takie wyrażenie jako nazwę kolumny, więc bez modyfikacji schematu
+albo użycia raw() nie da się tego poprawnie zapisać przez samo .avg().
+Z tego powodu policzyłem średnią po rekordach już pobranych przez Knex, żeby pozostać zgodnym
+z zakazem raw() i nie rozszerzać tabel poza specyfikację.

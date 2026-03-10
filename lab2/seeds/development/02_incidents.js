@@ -29,7 +29,6 @@ exports.seed = async function (knex) {
       status === "resolved"
         ? faker.date.soon({ days: 2, refDate: assignedAt })
         : null;
-
     incidents.push({
       location: faker.location.streetAddress(),
       district: faker.location.county(),
