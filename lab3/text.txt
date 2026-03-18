@@ -1,0 +1,11 @@
+npx sequelize-cli migration:generate --name create-heroes
+npx sequelize-cli migration:generate --name create-incidents
+
+npx sequelize-cli db:migrate
+npx sequelize-cli db:migrate:undo
+
+npx sequelize-cli seed:generate --name demo-heroes
+npx sequelize-cli seed:generate --name demo-incidents
+
+npx sequelize-cli db:seed:all
+npx sequelize-cli db:seed:undo:all
