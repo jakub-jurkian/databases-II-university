@@ -5,8 +5,7 @@ const { faker } = require("@faker-js/faker");
 module.exports = {
   async up(queryInterface, Sequelize) {
     faker.seed(7);
-
-    const levels = ["low", "medium", "critical"];
+    // levels - low, medium, critical
 
     const incidents = [
       {

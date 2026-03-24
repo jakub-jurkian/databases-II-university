@@ -4,7 +4,6 @@ const { faker } = require("@faker-js/faker");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // Set seed for determinism (Requirement: faker.seed(7))
     faker.seed(7);
 
     const powers = ["flight", "strength", "telepathy", "speed", "invisibility"];

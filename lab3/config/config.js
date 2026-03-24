@@ -9,7 +9,6 @@ module.exports = {
     port: process.env.DB_PORT || 5432,
     dialect: "postgres",
     logging: false,
-    // turns off logging every SQL query in console
   },
   test: {
     username: process.env.DB_USER,

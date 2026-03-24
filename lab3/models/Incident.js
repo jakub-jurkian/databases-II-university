@@ -41,7 +41,7 @@ Incident.init(
     timestamps: true,
     hooks: {
       afterUpdate: async (incident, options) => {
-        const { transaction } = options; // Pobieramy transakcję z zewnątrz!
+        const { transaction } = options;
 
         if (
           incident.changed("status") &&
@@ -49,7 +49,6 @@ Incident.init(
           incident.status === "resolved" &&
           incident.hero_id
         ) {
-          // zaimportować model Hero tutaj lub użyć asocjacji, aby uniknąć circular dependency
           const Hero = sequelize.models.Hero;
           const hero = await Hero.findByPk(incident.hero_id, { transaction });
 

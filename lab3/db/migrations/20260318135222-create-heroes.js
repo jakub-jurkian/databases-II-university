@@ -15,7 +15,6 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      // IMPORTANT: In Postgres, ENUMs are custom types
       power: {
         type: Sequelize.ENUM(
           "flight",
