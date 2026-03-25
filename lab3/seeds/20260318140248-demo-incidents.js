@@ -44,6 +44,10 @@ module.exports = {
     ];
 
     await queryInterface.bulkInsert("incidents", incidents);
+
+    await queryInterface.sequelize.query(
+      'SELECT setval(pg_get_serial_sequence(\'incidents\', \'id\'), COALESCE((SELECT MAX(id) FROM incidents), 1), true);',
+    );
   },
 
   async down(queryInterface, Sequelize) {
