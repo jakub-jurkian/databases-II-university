@@ -1,0 +1,7 @@
+npx prisma migrate reset
+
+npx prisma validate
+
+npx prisma migrate dev --name init
+npx prisma db seed
+

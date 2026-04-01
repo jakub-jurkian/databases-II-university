@@ -11,14 +11,13 @@ const findAll = async ({
   const safeSortBy = allowedSortFields.includes(sortBy) ? sortBy : "created_at";
   const parsedPage = Math.max(parseInt(page, 10) || 1, 1);
   const parsedPageSize = Math.max(parseInt(pageSize, 10) || 10, 1);
+  const limit = Math.min(parsedPageSize, 50);
+  const offset = (parsedPage - 1) * limit;
 
   let query = db("heroes");
 
   if (power) query = query.where("power", power);
   if (status) query = query.where("status", status);
-
-  const limit = Math.min(parsedPageSize, 50);
-  const offset = (parsedPage - 1) * limit;
 
   const totalCountQuery = query.clone().count("* as total").first();
 
