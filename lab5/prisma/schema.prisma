@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Power {
+  flight
+  strength
+  telepathy
+  speed
+  invisibility
+}
+
+enum HeroStatus {
+  available
+  busy
+  retired
+}
+
+enum IncidentLevel {
+  low
+  medium
+  critical
+}
+
+enum IncidentStatus {
+  open
+  assigned
+  resolved
+}
+
+model Hero {
+  id            Int            @id @default(autoincrement())
+  name          String         @unique @db.VarChar(120)
+  power         Power
+  status        HeroStatus     @default(available)
+  missionsCount Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  incidents     Incident[]
+
+  @@map("heroes")
+}
+
+model Incident {
+  id          Int                @id @default(autoincrement())
+  location    String             @db.VarChar(200)
+  district    String?            @db.VarChar(100)
+  level       IncidentLevel
+  status      IncidentStatus     @default(open)
+  heroId      Int?
+  hero        Hero?              @relation(fields: [heroId], references: [id], onDelete: SetNull)
+  assignedAt  DateTime?
+  resolvedAt  DateTime?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  categories  IncidentCategory[]
+
+  @@map("incidents")
+}
+
+model Category {
+  id        Int                @id @default(autoincrement())
+  name      String             @unique @db.VarChar(80)
+  incidents IncidentCategory[]
+
+  @@map("categories")
+}
+
+model IncidentCategory {
+  incidentId Int
+  categoryId Int
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([incidentId, categoryId])
+  @@map("incident_categories")
+}
